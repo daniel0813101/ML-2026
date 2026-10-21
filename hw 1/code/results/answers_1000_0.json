@@ -1,0 +1,44 @@
+[
+  {
+    "question": 11,
+    "metric": "zero_error_percent",
+    "value": 0.0,
+    "choice_number": 1,
+    "choice_value": 0
+  },
+  {
+    "question": 12,
+    "metric": "median_updates",
+    "value": 1386.0,
+    "choice_number": 4,
+    "choice_value": 1350
+  },
+  {
+    "question": 13,
+    "metric": "median_norm",
+    "value": 75.34345049771655,
+    "choice_number": 2,
+    "choice_value": 75
+  },
+  {
+    "question": 14,
+    "metric": "median_updates",
+    "value": 1386.0,
+    "choice_number": 4,
+    "choice_value": 1350
+  },
+  {
+    "question": 15,
+    "metric": "median_updates",
+    "value": 2194.0,
+    "choice_number": 1,
+    "choice_value": 2200
+  },
+  {
+    "question": 16,
+    "metric": "median_updates",
+    "value": 12437.0,
+    "choice_number": 3,
+    "choice_value": 12500
+  }
+]

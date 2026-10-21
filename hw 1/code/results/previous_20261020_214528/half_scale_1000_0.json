@@ -1,0 +1,11 @@
+{
+  "configuration": "half_scale",
+  "runs": 1000,
+  "start_seed": 0,
+  "bias_before_scaling": 1.0,
+  "global_scale": 0.5,
+  "dataset_sha256": "30586693fc55e33dbf7204cc0927747556fce498f0a18bbe2f81cb9917bfe044",
+  "zero_error_percent": 0.0,
+  "median_updates": 1386.0,
+  "median_norm": 37.67172524885827
+}

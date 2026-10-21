@@ -1,0 +1,49 @@
+{
+  "python": "3.15.0",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "executable": "/home/daniel/miniconda3/envs/ML2026/bin/python",
+  "packages": {
+    "numpy": "2.5.4",
+    "numba": "0.68.0",
+    "llvmlite": "0.50.0"
+  },
+  "checks_passed": [
+    "sign(0)=+1, mistake-only updates, and reset plus 2N stopping",
+    "safety limit raises instead of returning an incomplete experiment",
+    "compiled versus pure Python seed-0 run for every configuration",
+    "full-data errors recomputed for all 4000 saved weights with matrix multiplication",
+    "all 1000 paired baseline/half-scale trajectories have identical counts and half-sized final weights",
+    "all six individual entry points agree with run_all.py"
+  ],
+  "previous_results": "/home/daniel/Study/ML 2026/hw 1/code/results/previous_20261020_214528",
+  "exact_array_equality_with_previous": {
+    "baseline": {
+      "weights": true,
+      "updates": true,
+      "checks": true,
+      "errors": true,
+      "norms": true
+    },
+    "half_scale": {
+      "weights": true,
+      "updates": true,
+      "checks": true,
+      "errors": true,
+      "norms": true
+    },
+    "half_bias": {
+      "weights": true,
+      "updates": true,
+      "checks": true,
+      "errors": true,
+      "norms": true
+    },
+    "zero_bias": {
+      "weights": true,
+      "updates": true,
+      "checks": true,
+      "errors": true,
+      "norms": true
+    }
+  }
+}

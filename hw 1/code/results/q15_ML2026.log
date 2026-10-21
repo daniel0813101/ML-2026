@@ -1,0 +1,8 @@
+Running half_bias: 1000 experiments...
+{
+  "question": 15,
+  "metric": "median_updates",
+  "value": 2194.0,
+  "choice_number": 1,
+  "choice_value": 2200
+}

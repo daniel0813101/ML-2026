@@ -1,0 +1,8 @@
+Running zero_bias: 1000 experiments...
+{
+  "question": 16,
+  "metric": "median_updates",
+  "value": 12437.0,
+  "choice_number": 3,
+  "choice_value": 12500
+}
