@@ -17,7 +17,7 @@ The complete experiments and all six individual question entry points were rerun
 
 ```bash
 conda activate ML2026
-cd "/home/daniel/Study/ML 2026/hw 1/code"
+cd "/home/daniel/Study/ML-2026/hw 1/code"
 python run_all.py
 ```
 
@@ -37,9 +37,9 @@ The data is downloaded once to `data/hw1_train.dat`, using the HTTPS equivalent 
 
 | File | Purpose |
 | --- | --- |
-| `pla.py` | Shared data loader, PLA, experiment loop, statistics, and output |
-| `q11.py` through `q16.py` | Individual question entry points |
-| `run_all.py` | All six questions; shares baseline experiments for Q11-Q13 |
+| `pla.py` | Reusable data loader, PLA trainer, experiment collection, and output utilities |
+| `q11.py` through `q16.py` | Independent question implementations: input transformation, statistic, and answer choices |
+| `run_all.py` | Calls each question’s solve function and saves the combined answers |
 | `report.md` | English tutorial: derive, implement, validate, and interpret each question |
 | `requirements.txt` | Exact tested Python package versions |
 | `environment.yml` | Conda environment including the tested Python version |
@@ -51,7 +51,9 @@ python q11.py
 python q16.py
 ```
 
-Every individual script performs fresh experiments. With identical inputs, seeds, and environment, it reproduces the corresponding result from `run_all.py`.
+Each question owns a `solve()` function that prepares its inputs, calls the library, computes its requested statistic, and selects its answer. `pla.py` contains no question table or question dispatcher. Every individual script performs fresh experiments. With identical inputs, seeds, and environment, it reproduces the corresponding result from `run_all.py`.
+
+The batch runner also performs fresh experiments for each question, including separate reproducible baseline runs for Q11-Q13. This takes longer than sharing one baseline run, but exercises each question’s implementation. Use `--output-dir /tmp/hw1-practice` to keep practice outputs separate from the saved assignment results.
 
 For a small practice run:
 

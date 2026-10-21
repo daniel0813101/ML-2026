@@ -1,6 +1,6 @@
 # Learning to implement and analyze PLA: Homework 1, Q11-Q16
 
-This report is a guide to solving the assignment yourself: translate the wording into a specification, build the smallest correct algorithm, check its behavior, repeat experiments, and interpret the numbers. Read it alongside `pla.py`; the six `q*.py` files select a question and delegate to that shared implementation.
+This report is a guide to solving the assignment yourself: translate the wording into a specification, build the smallest correct algorithm, check its behavior, repeat experiments, and interpret the numbers. Read it alongside `pla.py`; each `q*.py` file implements its own input transformation, requested statistic, and answer selection, using reusable functions from `pla.py`.
 
 ## 1. Results and experimental context
 
@@ -54,10 +54,10 @@ $$w_0 + \sum_{j=1}^{12} w_j x_j.$$
 
 The extra coordinate lets a single dot product represent an intercept. The augmented matrix has shape (256, 13), and the weight vector has length 13. Its column count happens to equal the raw file's column count, but the last raw column is a label, while every augmented column is an input.
 
-Load the file with `np.loadtxt`, split `data[:, :-1]` and `data[:, -1]`, check the shape and labels, then add the bias column. In `run_experiments`, the construction is:
+Load the file with `np.loadtxt`, split `data[:, :-1]` and `data[:, -1]`, check the shape and labels, then add the bias column. Each question constructs its augmented inputs before calling `run_experiments`. For example, Q14 uses:
 
 ```python
-x = np.column_stack((np.full(len(labels), bias), features)) * scale
+x = np.column_stack((np.full(len(labels), 1.0), features)) * 0.5
 ```
 
 The order matters for Q14: augment first, then scale, so the bias is halved too. `np.ascontiguousarray` prepares a consistent memory layout for the compiled loop. `float64` gives a consistent floating-point representation for features and weights.
@@ -117,17 +117,18 @@ Numba's `@njit(cache=True)` compiles the loop for speed. The explicit coordinate
 
 `run_experiments` is responsible for the scientific experiment rather than the individual updates:
 
-1. Load and transform the data for the selected configuration.
+1. Receive the feature matrix prepared by the calling question.
 2. Allocate arrays for 1000 independent outcomes.
 3. For each seed, call `train_pla` with fresh zero weights.
 4. Save final weights, updates, and checks.
 5. Recompute predictions on all 256 rows and record the number of errors.
-6. Compute weight norms and summary statistics.
-7. Save raw outcomes and summaries.
+6. Compute weight norms and return the raw result arrays.
+
+Each question’s `solve()` prepares the data, calls this collector, calculates its own requested statistic, and supplies its answer choices to the generic `report` helper. `save_experiments` saves raw outcomes and descriptive statistics; `save_answers` saves the selected answer. The shared library contains no question-specific configuration table or dispatcher.
 
 Using the same seed set across configurations makes comparisons paired. In particular, configurations with the same update decisions see the same sampled indices until stopping. Separate random seeds need not mean separate machines or separate files: seeds 0-999 give the requested distinct initialization states for the pseudorandom generator.
 
-Q11-Q13 summarize the same baseline experiment, so `run_all.py` runs it once and extracts three statistics. Each individual entry point deliberately reruns the experiment, rather than depending on an existing result file.
+`run_all.py` calls all six question implementations. Q11-Q13 each rerun the baseline with the same seeds, so their trajectories agree while each script remains independently usable. Each individual script also performs fresh experiments instead of reading an existing result file. This repeats baseline work in exchange for a straightforward batch runner that exercises every implementation.
 
 ## 7. Q11: evaluate the final classifier, not the stopping streak
 
@@ -215,7 +216,7 @@ With x0 = 0, w0 starts at zero and never changes. The score reduces to
 
 $$\sum_{j=1}^{12}w_j x_j,$$
 
-and the decision boundary must pass through the origin. Keeping an all-zero first column is mathematically equivalent to removing that coordinate and training a 12-dimensional weight vector. The shared code retains the column so all configurations have a consistent shape.
+and the decision boundary must pass through the origin. Keeping an all-zero first column is mathematically equivalent to removing that coordinate and training a 12-dimensional weight vector. Q16 retains the column so all configurations have a consistent shape.
 
 The measured update median was 12437; select **Choice 3: 12500**. This is about nine times the baseline median. Removing the intercept changes the available separating boundaries and the geometry seen by PLA; the empirical cost here is much larger.
 
@@ -272,7 +273,7 @@ From a WSL shell:
 
 ```bash
 conda activate ML2026
-cd "/home/daniel/Study/ML 2026/hw 1/code"
+cd "/home/daniel/Study/ML-2026/hw 1/code"
 python run_all.py --runs 1000 --start-seed 0
 ```
 
