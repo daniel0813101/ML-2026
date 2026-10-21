@@ -1,0 +1,81 @@
+{
+  "timestamp_utc": "2026-10-20T13:29:16.538288+00:00",
+  "python_version": "3.13.5",
+  "python_executable": "/home/daniel/miniconda3/bin/python",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "numpy_version": "2.2.6",
+  "commands": [
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_decision_stump.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "run_all.py",
+        "--output",
+        "results.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "q12.py",
+        "--output",
+        "results/q12.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "q13.py",
+        "--output",
+        "results/q13.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "q14.py",
+        "--output",
+        "results/q14.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "q15.py",
+        "--output",
+        "results/q15.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/daniel/miniconda3/bin/python",
+        "-B",
+        "q16.py",
+        "--output",
+        "results/q16.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "individual_results_match_batch": true
+}

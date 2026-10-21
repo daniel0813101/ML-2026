@@ -1,0 +1,23 @@
+{
+  "numpy_version": "2.2.6",
+  "bit_generator": "PCG64",
+  "results": [
+    {
+      "number": 16,
+      "n": 300,
+      "tau": 0.1,
+      "choices": [
+        0.0,
+        0.002,
+        0.004,
+        0.006,
+        0.008
+      ],
+      "trials": 10000,
+      "seed": 2042,
+      "median_gap": 0.0038537073288949994,
+      "choice_number": 3,
+      "closest_choice": 0.004
+    }
+  ]
+}

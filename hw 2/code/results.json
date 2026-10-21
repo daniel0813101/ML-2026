@@ -1,0 +1,91 @@
+{
+  "numpy_version": "2.5.4",
+  "bit_generator": "PCG64",
+  "results": [
+    {
+      "number": 12,
+      "n": 3,
+      "tau": 0.0,
+      "choices": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "trials": 10000,
+      "seed": 2038,
+      "median_gap": 0.1047779532233962,
+      "choice_number": 1,
+      "closest_choice": 0.1
+    },
+    {
+      "number": 13,
+      "n": 30,
+      "tau": 0.0,
+      "choices": [
+        0.0,
+        0.01,
+        0.02,
+        0.03,
+        0.04
+      ],
+      "trials": 10000,
+      "seed": 2039,
+      "median_gap": 0.011443475001547715,
+      "choice_number": 2,
+      "closest_choice": 0.01
+    },
+    {
+      "number": 14,
+      "n": 3,
+      "tau": 0.1,
+      "choices": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3
+      ],
+      "trials": 10000,
+      "seed": 2040,
+      "median_gap": 0.20914772539144427,
+      "choice_number": 3,
+      "closest_choice": 0.2
+    },
+    {
+      "number": 15,
+      "n": 30,
+      "tau": 0.1,
+      "choices": [
+        0.0,
+        0.01,
+        0.02,
+        0.03,
+        0.04
+      ],
+      "trials": 10000,
+      "seed": 2041,
+      "median_gap": 0.037459642733907624,
+      "choice_number": 5,
+      "closest_choice": 0.04
+    },
+    {
+      "number": 16,
+      "n": 300,
+      "tau": 0.1,
+      "choices": [
+        0.0,
+        0.002,
+        0.004,
+        0.006,
+        0.008
+      ],
+      "trials": 10000,
+      "seed": 2042,
+      "median_gap": 0.0038537073288949994,
+      "choice_number": 3,
+      "closest_choice": 0.004
+    }
+  ]
+}
