@@ -4,7 +4,8 @@ import unittest
 
 import numpy as np
 
-from decision_stump import Stump, fit_stump, generate_data, out_error, run_experiment, QUESTIONS
+from decision_stump import Stump, fit_stump, generate_data, out_error
+from q14 import solve as solve_q14
 
 
 class DecisionStumpTests(unittest.TestCase):
@@ -55,8 +56,8 @@ class DecisionStumpTests(unittest.TestCase):
 
     def test_repeatability(self):
         """Reproduce identical summaries when using the same random seed."""
-        first = run_experiment(QUESTIONS[14], trials=20, seed=42)
-        self.assertEqual(first, run_experiment(QUESTIONS[14], trials=20, seed=42))
+        first = solve_q14(trials=20, seed=42)
+        self.assertEqual(first, solve_q14(trials=20, seed=42))
 
 
 if __name__ == "__main__":

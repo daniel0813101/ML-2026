@@ -1,7 +1,7 @@
-"""Shared decision stump implementation and reproducible homework experiments."""
+"""Reusable decision stump learning, data generation, and output utilities."""
 
 import argparse
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 import json
 from pathlib import Path
 
@@ -121,82 +121,35 @@ def out_error(stump: Stump, tau: float) -> float:
     return float(tau + (1.0 - 2.0 * tau) * clean_error)
 
 
-@dataclass(frozen=True)
-class Question:
-    """Configuration for one homework experiment.
-
-    Attributes:
-        number: Homework question number.
-        n: Training data size.
-        tau: Independent label flip probability.
-        choices: Multiple-choice values in their original order.
-    """
-
-    number: int
-    n: int
-    tau: float
-    choices: tuple[float, ...]
-
-
-QUESTIONS = {
-    12: Question(12, 3, 0.0, (0.10, 0.15, 0.20, 0.25, 0.30)),
-    13: Question(13, 30, 0.0, (0.00, 0.01, 0.02, 0.03, 0.04)),
-    14: Question(14, 3, 0.1, (0.10, 0.15, 0.20, 0.25, 0.30)),
-    15: Question(15, 30, 0.1, (0.00, 0.01, 0.02, 0.03, 0.04)),
-    16: Question(16, 300, 0.1, (0.000, 0.002, 0.004, 0.006, 0.008)),
-}
-
-
-def run_experiment(question: Question, trials: int = 10000, seed: int = 2026) -> dict:
-    """Repeat training and summarize the median generalization gap.
+def parse_args(description: str) -> argparse.Namespace:
+    """Parse the shared experiment options without selecting a question.
 
     Args:
-        question: Dataset configuration and answer choices.
-        trials: Positive number of independently generated datasets.
-        seed: Seed for NumPy's PCG64 random generator.
+        description: Help text supplied by the calling script.
 
     Returns:
-        JSON-compatible settings, median gap, and closest answer.
-
-    Raises:
-        ValueError: If trials is not positive.
+        Validated trial count, base seed, and optional JSON output path.
     """
-    if trials < 1:
-        raise ValueError("trials must be positive.")
-    rng = np.random.Generator(np.random.PCG64(seed))
-    gaps = np.empty(trials)
-    for index in range(trials):
-        x, y = generate_data(question.n, question.tau, rng)
-        stump = fit_stump(x, y)
-        gaps[index] = out_error(stump, question.tau) - stump.ein
-    median = float(np.median(gaps))
-    choice_index = int(np.argmin(np.abs(np.asarray(question.choices) - median)))
-    return {
-        **asdict(question),
-        "trials": trials,
-        "seed": seed,
-        "median_gap": median,
-        "choice_number": choice_index + 1,
-        "closest_choice": question.choices[choice_index],
-    }
-
-
-def main(question_number: int | None = None) -> None:
-    """Run one question or all questions through a command-line interface.
-
-    Args:
-        question_number: Fixed question number, or None to run Q12-Q16.
-    """
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--trials", type=int, default=10000)
-    parser.add_argument("--seed", type=int, default=2026, help="Base seed; add question number.")
+    parser.add_argument("--seed", type=int, default=2026,
+                        help="Base seed; each question adds its number.")
     parser.add_argument("--output", type=Path, help="Optional JSON output path.")
     args = parser.parse_args()
-    numbers = list(QUESTIONS) if question_number is None else [question_number]
-    results = [
-        run_experiment(QUESTIONS[number], args.trials, args.seed + number)
-        for number in numbers
-    ]
+    if args.trials < 1:
+        parser.error("trials must be positive")
+    if args.seed < 0:
+        parser.error("seed must be nonnegative")
+    return args
+
+
+def write_report(results: list[dict], output: Path | None = None) -> None:
+    """Print and optionally save experiment records with environment metadata.
+
+    Args:
+        results: Records computed by the calling question implementations.
+        output: Optional JSON path, relative to the current working directory.
+    """
     report = {
         "numpy_version": np.__version__,
         "bit_generator": "PCG64",
@@ -204,7 +157,7 @@ def main(question_number: int | None = None) -> None:
     }
     rendered = json.dumps(report, indent=2)
     print(rendered)
-    if args.output is not None:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(rendered + "\n", encoding="utf-8")
-
+    if output is not None:
+        output = Path(output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(rendered + "\n", encoding="utf-8")
