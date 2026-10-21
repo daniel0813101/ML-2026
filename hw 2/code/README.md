@@ -1,6 +1,6 @@
 # Homework 2: Decision stump（Q12–Q16）
 
-使用共用 Python 模組及每題獨立入口，無需 Notebook 執行狀態。程式碼、註解與 Google style docstring 均使用英文。Q11 為理論題，相關公式說明如下，沒有另外的實驗入口。
+使用共用 Python 函式庫及每題獨立實作，無需 Notebook 執行狀態。程式碼、註解與 Google style docstring 均使用英文。Q11 為理論題，相關公式說明如下，沒有另外的實驗入口。
 
 ## 環境與重現方式
 
@@ -24,16 +24,18 @@ python run_all.py --output results.json
 
 | 檔案 | 用途 |
 | --- | --- |
-| decision_stump.py | 資料生成、訓練、解析 E_out、實驗與 CLI |
+| decision_stump.py | 共用資料生成、訓練、解析 E_out，以及 CLI 參數與 JSON 輸出工具 |
 | q12.py | N = 3，tau = 0 |
 | q13.py | N = 30，tau = 0 |
 | q14.py | N = 3，tau = 0.1 |
 | q15.py | N = 30，tau = 0.1 |
 | q16.py | N = 300，tau = 0.1 |
-| run_all.py | 一次執行 Q12–Q16 |
+| run_all.py | 呼叫各題的 solve() 並輸出完整結果 |
 | results.json | 預設設定的實際執行結果 |
 | test_decision_stump.py | 暴力搜尋比對、邊界、公式與可重現性檢查 |
 | requirements.txt | 固定 NumPy 版本 |
+
+各題的 `solve()` 自行設定 N、tau、亂數種子與選項，實作 10,000 次資料生成與訓練迴圈，計算 median(E_out - E_in) 並選出答案。`decision_stump.py` 僅提供可重用函式，不再包含題目設定表或題號分派。`run_all.py` 直接呼叫各題實作，`solve()` 不會自行輸出或寫入檔案。
 
 各題可單獨執行，例如：
 
@@ -94,7 +96,7 @@ python -m unittest -v test_decision_stump.py
 All tests, the batch program, and Q12-Q16 entry points were rerun successfully using Python 3.13.5 and NumPy 2.2.6. The numerical results match the earlier Windows run. The updated results.json records NumPy 2.2.6; requirements.txt retains the original Python 3.12 / NumPy 1.26.4 setup.
 
 ```bash
-cd "/home/daniel/Study/ML 2026/hw 2/code"
+cd "/home/daniel/Study/ML-2026/hw 2/code"
 /home/daniel/miniconda3/bin/python -B -m unittest -v test_decision_stump.py
 /home/daniel/miniconda3/bin/python -B run_all.py --output results.json
 ```
@@ -108,7 +110,7 @@ The latest verification used the WSL conda environment ML2026 with Python 3.15.0
 
 ```bash
 conda activate ML2026
-cd "/home/daniel/Study/ML 2026/hw 2/code"
+cd "/home/daniel/Study/ML-2026/hw 2/code"
 python -B -m unittest -v test_decision_stump.py
 python -B run_all.py --output results.json
 ```

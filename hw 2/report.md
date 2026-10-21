@@ -18,7 +18,7 @@ Q11.1 is theoretical: select **Choice 2, |theta| / 2**. Its proof appears in Sec
 
 Verified environment:
 
-- Working directory: `/home/daniel/Study/ML 2026/hw 2/code`.
+- Working directory: `/home/daniel/Study/ML-2026/hw 2/code`.
 - Python executable: `/home/daniel/miniconda3/bin/python`.
 - Python version: 3.13.5.
 - NumPy version: 2.2.6.
@@ -305,14 +305,14 @@ Even when tau = 0, the current generator draws the flip uniforms. Removing those
 
 ## 7. Assemble the experiment and keep its responsibilities separate
 
-The core logic is:
+Each question implements its own experiment in `solve()`. It sets N, tau, the answer choices, and its PCG64 seed (base seed + question number), then calls the reusable generator, learner, and population-error function. The core logic is:
 
 ```python
 gaps = np.empty(trials)
 for index in range(trials):
-    x, y = generate_data(question.n, question.tau, rng)
+    x, y = generate_data(n, tau, rng)
     stump = fit_stump(x, y)
-    gaps[index] = out_error(stump, question.tau) - stump.ein
+    gaps[index] = out_error(stump, tau) - stump.ein
 
 median_gap = float(np.median(gaps))
 ```
@@ -329,13 +329,12 @@ The files reflect different responsibilities:
 | `Stump` | Store s, theta, and training error; predict labels | Keep one learned model explicit |
 | `fit_stump` | Select the hypothesis using training data | Keep optimization independent of population evaluation |
 | `out_error` | Evaluate a model analytically | Avoid mixing clean and noisy errors |
-| `Question`, `QUESTIONS` | Store N, tau, and choices | Change experimental settings without copying the learner |
-| `run_experiment` | Repeat and summarize | Centralize the statistical procedure |
-| `main` | Parse options and print/save results | Keep command-line handling outside the learning logic |
-| `q12.py`–`q16.py` | Call `main` with one question number | Provide a separate executable for each question |
-| `run_all.py` | Execute all configurations | Reproduce the complete experiment consistently |
+| `q12.py`–`q16.py`: `solve` | Own N, tau, choices, seed, trial loop, median, and answer selection | Make each question independently readable and executable |
+| `parse_args`, `write_report` | Validate shared CLI options and print/save JSON records | Keep reusable I/O separate from question logic |
+| Each script’s `main` | Call its own `solve` and output the result | Provide a standalone executable without a question dispatcher |
+| `run_all.py` | Call each question’s `solve` and combine the records | Exercise the same implementations used by standalone scripts |
 
-`@dataclass(frozen=True)` provides named fields and prevents reassignment after construction. It makes it harder to accidentally change a fitted model or question configuration halfway through an experiment.
+`@dataclass(frozen=True)` provides named fields and prevents reassignment after construction. It makes it harder to accidentally change a fitted model halfway through an experiment. Question settings now belong to the individual scripts; the library contains no `Question` class, `QUESTIONS` table, or question dispatcher.
 
 Google style docstrings describe what a function does, its inputs, outputs, and invalid-input behavior. Comments should explain a non-obvious reason, such as endpoint handling, rather than merely repeat the next line of code.
 
@@ -418,7 +417,7 @@ Across these runs, larger N is associated with smaller median gaps. These five e
 The commands below use the environment that actually completed this execution:
 
 ```bash
-cd "/home/daniel/Study/ML 2026/hw 2/code"
+cd "/home/daniel/Study/ML-2026/hw 2/code"
 
 /home/daniel/miniconda3/bin/python -B -m unittest -v test_decision_stump.py
 /home/daniel/miniconda3/bin/python -B run_all.py --output results.json
