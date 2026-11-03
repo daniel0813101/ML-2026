@@ -8,8 +8,8 @@ from unittest.mock import patch
 import numpy as np
 
 from linear_models import (classification_error, cross_entropy, fit_linear,
-                           load_data, squared_error, train_linear_sgd,
-                           train_logistic_sgd)
+                           load_data, squared_error, train_logistic_sgd)
+from q12 import train_linear_sgd
 import q12
 import q13
 import q14

@@ -50,28 +50,6 @@ def validate_experiment(trials: int, seed: int, iterations: int,
         raise ValueError("learning_rate must be finite and positive.")
 
 
-def train_linear_sgd(x: np.ndarray, y: np.ndarray, rng: np.random.Generator,
-                     iterations: int, learning_rate: float) -> np.ndarray:
-    """Train from zero with uniformly sampled, with-replacement SGD updates.
-
-    Args:
-        x: Design matrix, already including its bias column.
-        y: Training labels.
-        rng: Independent random generator for this experiment.
-        iterations: Number of single-example updates.
-        learning_rate: Step size for the gradient of squared error.
-
-    Returns:
-        The weight vector after exactly iterations updates.
-    """
-    w = np.zeros(x.shape[1])
-    for index in rng.integers(len(y), size=iterations):
-        row = x[index]
-        # Gradient of (w^T x - y)^2; there is no 1/2 in the assigned error.
-        w -= 2 * learning_rate * (w @ row - y[index]) * row
-    return w
-
-
 def train_logistic_sgd(x: np.ndarray, y: np.ndarray, rng: np.random.Generator,
                        initial: np.ndarray, iterations: int,
                        learning_rate: float) -> np.ndarray:

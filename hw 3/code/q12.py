@@ -3,7 +3,29 @@
 import numpy as np
 
 from linear_models import (closest_answer, load_data, parse_args, squared_error,
-                           train_linear_sgd, validate_experiment, write_report)
+                           validate_experiment, write_report)
+
+
+def train_linear_sgd(x: np.ndarray, y: np.ndarray, rng: np.random.Generator,
+                     iterations: int, learning_rate: float) -> np.ndarray:
+    """Train from zero with uniformly sampled, with-replacement SGD updates.
+
+    Args:
+        x: Design matrix, already including its bias column.
+        y: Training labels.
+        rng: Independent random generator for this experiment.
+        iterations: Number of single-example updates.
+        learning_rate: Step size for the gradient of squared error.
+
+    Returns:
+        The weight vector after exactly iterations updates.
+    """
+    w = np.zeros(x.shape[1])
+    for index in rng.integers(len(y), size=iterations):
+        row = x[index]
+        # Gradient of (w^T x - y)^2; there is no 1/2 in the assigned error.
+        w -= 2 * learning_rate * (w @ row - y[index]) * row
+    return w
 
 
 def solve(trials: int = 1000, seed: int = 2026, iterations: int = 800,
